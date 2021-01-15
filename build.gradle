@@ -18,7 +18,7 @@ dependencies {
     compile group: 'org.joml', name: 'joml', version: '1.10.0'
 }
 
-mainClassName = 'ch.bbcag.app.Launcher'
+mainClassName = 'ch.bbcag.physicsengine.Launcher'
 
 javafx {
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.graphics']
@@ -26,7 +26,7 @@ javafx {
 
 jar {
     manifest{
-        attributes 'Main-Class': 'ch.bbcag.app.Launcher'
+        attributes 'Main-Class': 'ch.bbcag.physicsengine.Launcher'
     }
 
     from {

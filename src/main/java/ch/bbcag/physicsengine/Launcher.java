@@ -1,4 +1,4 @@
-package ch.bbcah.app;
+package ch.bbcag.physicsengine;
 
 import javafx.application.Application;
 
