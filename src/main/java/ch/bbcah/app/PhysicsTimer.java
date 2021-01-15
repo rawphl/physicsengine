@@ -28,7 +28,7 @@ public class PhysicsTimer extends AnimationTimer {
 
     private double t = 0.0;
     private double dt = 0.001;
-    public double maxFrameLength = 0.25;
+    public double maxFrameLength = dt * 30;
     private double accumulator = 0.0;
     private boolean quit = false;
     public UpdateHandler onUpdate;
