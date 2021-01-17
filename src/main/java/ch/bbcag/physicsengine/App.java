@@ -1,61 +1,49 @@
 package ch.bbcag.physicsengine;
 
+import ch.bbcag.physicsengine.simulation.PhysicsSimulation;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.paint.Color;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import org.joml.Vector2d;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class App extends Application {
     public int width = 1280;
     public int height = 720;
-    public Canvas canvas;
-    private PhysicsTimer timer = new PhysicsTimer();
-    public List<Particle> particles = new ArrayList<>();
+    private PhysicsSimulation physicsSimulation;
+    public Scene scene;
+    public Stage stage;
+    public Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
+
+    public AnimationTimer timer = new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+            stage.setTitle(String.format("FPS: %.2f", physicsSimulation.getFPS()));
+        }
+    };
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        for (var i = 0; i < 1000; i++) {
-            var m = 30 * Math.random();
-            var particle = new Particle(m);
-            particle.position.x = Math.random() * width;
-            particle.position.y = Math.random() * height;
-            particles.add(particle);
-        }
+        stage = primaryStage;
+        physicsSimulation = new PhysicsSimulation(width, height);
         var root = new Group();
-        canvas = new Canvas(width, height);
-        root.getChildren().add(canvas);
+        root.getChildren().add(physicsSimulation.canvas);
+        scene = new Scene(root, width, height);
 
-        timer.onUpdate = (t, dt) -> {
-            for (var particle : particles) {
-                particle.update(t, dt);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+            switch (key.getCode()) {
+                case ESCAPE -> System.exit(0);
             }
-        };
+        });
 
-        timer.onInterpolate = (alpha) -> {
-            for (var particle : particles) {
-                particle.lerp(alpha);
-            }
-        };
-
-        timer.onRender = () -> {
-            var gc = canvas.getGraphicsContext2D();
-            gc.setFill(Color.DARKGRAY);
-            gc.fillRect(0, 0, width, height);
-
-            for (var particle : particles) {
-                gc.setFill(Color.rgb((int)particle.mass, (int)particle.mass, (int)particle.mass));
-                gc.fillOval(particle.position.x, particle.position.y, particle.mass, particle.mass);
-            }
-        };
-
-        primaryStage.setScene(new Scene(root, width, height));
+        primaryStage.setScene(scene);
         primaryStage.show();
+        physicsSimulation.start();
         timer.start();
     }
 }
