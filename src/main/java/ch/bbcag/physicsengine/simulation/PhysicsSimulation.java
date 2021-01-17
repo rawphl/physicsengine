@@ -6,8 +6,11 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PhysicsSimulation extends RenderedPhysicsSimulation {
+    private static final Logger log = LoggerFactory.getLogger(PhysicsSimulation.class);
     public List<Particle> particles = new ArrayList<>();
 
     public PhysicsSimulation(int width, int height) {
@@ -17,8 +20,6 @@ public class PhysicsSimulation extends RenderedPhysicsSimulation {
             var particle = new Particle(m);
             particle.position.x = Math.random() * width;
             particle.position.y = Math.random() * height;
-            particle.velocity.x = Math.random() * width;
-            particle.velocity.y = Math.random() * height;
             particles.add(particle);
         }
     }
@@ -26,6 +27,7 @@ public class PhysicsSimulation extends RenderedPhysicsSimulation {
     @Override
     public void onUpdate(double t, double dt) {
         for (var particle : particles) {
+            particle.velocity.y += 9.81 * dt;
             particle.update(t, dt);
         }
     }
