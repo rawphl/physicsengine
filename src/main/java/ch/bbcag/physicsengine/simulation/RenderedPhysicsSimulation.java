@@ -6,7 +6,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class RenderedPhysicsSimulation extends AbstractPhysicsSimulation {
-    private int targetFPS = 120;
     private double fps = 0;
     private int frameCounter;
     private boolean isPaused;
@@ -46,11 +45,6 @@ public abstract class RenderedPhysicsSimulation extends AbstractPhysicsSimulatio
 
     public RenderedPhysicsSimulation(int targetFPS, double dt, int targetUPS) {
         super(dt, targetUPS);
-        this.targetFPS = targetFPS;
-    }
-
-    public RenderedPhysicsSimulation(int targetFPS) {
-        this.targetFPS = targetFPS;
     }
 
     public void start() {

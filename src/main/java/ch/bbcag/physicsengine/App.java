@@ -37,17 +37,26 @@ public class App extends Application {
 
         scene = new Scene(root, width, height);
         world.scene = scene;
-        var body = new RigidBody();
+        var body = new RigidBody(1);
         world.addBody(body);
-        body.position.x = width/2;
-        body.position.y = 40;
+
+        for(var i = 0; i < 50000; i++) {
+            var b = new RigidBody(5 * Math.random());
+            b.position.x = width * Math.random();
+            b.position.y = height * Math.random();
+            b.linearVelocity.x = 1 * Math.random();
+            b.linearVelocity.y = 1 * Math.random();
+            world.addBody(b);
+        }
+
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             switch (key.getCode()) {
-                case W -> body.applyForce(new Vector2d(0, -1));
-                case A -> body.applyForce(new Vector2d(-1, 0));
-                case S -> body.applyForce(new Vector2d(0, 1));
-                case D -> body.applyForce(new Vector2d(1, 0));
+                case W -> body.linearVelocity.y += 1;
+                case A -> body.linearVelocity.x -= 1;
+                case S -> body.linearVelocity.y -= 1;
+                case D -> body.linearVelocity.x += 1;
+                case SPACE -> body.linearVelocity.mul(0.1);
                 case ESCAPE -> System.exit(0);
             }
         });

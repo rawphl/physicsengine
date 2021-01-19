@@ -5,9 +5,9 @@ import java.util.concurrent.Executors;
 
 public abstract class AbstractPhysicsSimulation {
     public Executor ec = Executors.newSingleThreadExecutor();
-    private int targetUPS = 25;
+    private int targetUPS = 15;
     private double t = 0.0;
-    private double dt = 0.01;
+    private double dt = 0.001;
     private double maxFrameLength = dt * targetUPS;
     private double accumulator = 0.0;
     private long lastTime;

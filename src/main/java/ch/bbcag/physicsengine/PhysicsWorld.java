@@ -8,14 +8,14 @@ import org.joml.Vector2d;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PhysicsWorld extends RenderedPhysicsSimulation {
     public static final Vector2d EARTH_GRAVITY = new Vector2d(0, 9.81);
     private final int width;
     private final int height;
     private List<RigidBody> bodies = new ArrayList<>();
-    private Vector2d tmp = new Vector2d();
-    private Vector2d tmp2 = new Vector2d();
+    public Random r = new Random();
 
     public PhysicsWorld(int width, int height) {
         super(width, height);
@@ -27,9 +27,10 @@ public class PhysicsWorld extends RenderedPhysicsSimulation {
     public void onRender(GraphicsContext gc) {
         gc.setFill(Color.DARKGRAY);
         gc.fillRect(0, 0, width, height);
-        gc.setFill(Color.RED);
+        gc.setFill(Color.FUCHSIA);
         bodies.forEach(b -> {
-            gc.fillOval(b.position.x, b.position.y, 30, 30);
+            gc.setFill(Color.FUCHSIA);
+            gc.fillOval(b.position.x, b.position.y, b.mass, b.mass);
         });
     }
 
@@ -42,18 +43,21 @@ public class PhysicsWorld extends RenderedPhysicsSimulation {
     @Override
     public void onUpdate(double t, double dt) {
         bodies.stream().forEach(b -> {
-            if(b.position.y + 30 >= height) {
-                b.velocity.y = -b.velocity.y;
+            if(b.position.y + b.mass > height) {
+                b.linearVelocity.y *= -1;
             }
 
-            if(b.position.y - 30 <= 0) {
-                b.velocity.y = -b.velocity.y;
+            if(b.position.y < 0) {
+                b.linearVelocity.y *= -1;
             }
 
-            tmp.set(b.velocity);
-            tmp2.set(b.velocity);
-            tmp.mul(tmp2.absolute()).mul(0.5).mul(0.1);
-            b.applyForce(new Vector2d(EARTH_GRAVITY));
+            if(b.position.x + b.mass > width) {
+                b.linearVelocity.x *= -1;
+            }
+
+            if(b.position.x < 0) {
+                b.linearVelocity.x *= -1;
+            }
             b.update(t, dt);
         });
     }
