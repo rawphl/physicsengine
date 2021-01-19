@@ -7,7 +7,7 @@ public abstract class AbstractPhysicsSimulation {
     public Executor ec = Executors.newSingleThreadExecutor();
     private int targetUPS = 25;
     private double t = 0.0;
-    private double dt = 0.001;
+    private double dt = 0.01;
     private double maxFrameLength = dt * targetUPS;
     private double accumulator = 0.0;
     private long lastTime;
@@ -73,6 +73,10 @@ public abstract class AbstractPhysicsSimulation {
     public void setTargetUPS(int targetUPS) {
         this.targetUPS = targetUPS;
         setTimeStep(dt);
+    }
+
+    public double getTime() {
+        return t;
     }
 
     public long getLastTime() {

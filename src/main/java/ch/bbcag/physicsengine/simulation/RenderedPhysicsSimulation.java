@@ -1,6 +1,7 @@
 package ch.bbcag.physicsengine.simulation;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -9,6 +10,7 @@ public abstract class RenderedPhysicsSimulation extends AbstractPhysicsSimulatio
     private double fps = 0;
     private int frameCounter;
     private boolean isPaused;
+    public Scene scene;
     public Canvas canvas;
     public int width;
     public int height;
