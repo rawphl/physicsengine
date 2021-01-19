@@ -1,6 +1,6 @@
 package ch.bbcag.physicsengine;
 
-import ch.bbcag.physicsengine.simulation.PhysicsSimulation;
+import ch.bbcag.physicsengine.rigidbody.RigidBody;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -16,40 +16,45 @@ import java.util.Map;
 public class App extends Application {
     public int width = 1280;
     public int height = 720;
-    private TestSimulation physicsSimulation;
     public Scene scene;
     public Stage stage;
     public Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
+    public PhysicsWorld world = new PhysicsWorld(width, height);
 
     public AnimationTimer timer = new AnimationTimer() {
         @Override
         public void handle(long now) {
-            stage.setTitle(String.format("t: %.2f, FPS: %.2f", physicsSimulation.getFPS(), physicsSimulation.getTime()));
+            stage.setTitle(String.format("t: %.2f, FPS: %.2f", world.getTime(), world.getFPS()));
         }
     };
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
-        physicsSimulation = new TestSimulation(width, height);
         var root = new Group();
-        root.getChildren().add(physicsSimulation.canvas);
+        world = new PhysicsWorld(width, height);
+        root.getChildren().add(world.canvas);
+
         scene = new Scene(root, width, height);
-        physicsSimulation.scene = scene;
+        world.scene = scene;
+        var body = new RigidBody();
+        world.addBody(body);
+        body.position.x = width/2;
+        body.position.y = 40;
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             switch (key.getCode()) {
-                case W -> physicsSimulation.rigidBody.addForce(new Vector2d(0, -1));
-                case A -> physicsSimulation.rigidBody.addForce(new Vector2d(-1, 0));
-                case S -> physicsSimulation.rigidBody.addForce(new Vector2d(0, 1));
-                case D -> physicsSimulation.rigidBody.addForce(new Vector2d(1, 0));
+                case W -> body.applyForce(new Vector2d(0, -1));
+                case A -> body.applyForce(new Vector2d(-1, 0));
+                case S -> body.applyForce(new Vector2d(0, 1));
+                case D -> body.applyForce(new Vector2d(1, 0));
                 case ESCAPE -> System.exit(0);
             }
         });
 
         primaryStage.setScene(scene);
         primaryStage.show();
-        physicsSimulation.start();
+        world.start();
         timer.start();
     }
 }
