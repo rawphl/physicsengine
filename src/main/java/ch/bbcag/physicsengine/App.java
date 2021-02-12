@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import org.joml.Vector2d;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,12 +39,12 @@ public class App extends Application {
         var body = new RigidBody(1);
         world.addBody(body);
 
-        for(var i = 0; i < 50000; i++) {
-            var b = new RigidBody(5 * Math.random());
-            b.position.x = width * Math.random();
-            b.position.y = height * Math.random();
+        for(var i = 0; i < 500; i++) {
+            var b = new RigidBody(10 * Math.random());
             b.linearVelocity.x = 1 * Math.random();
             b.linearVelocity.y = 1 * Math.random();
+            b.position.x = width * Math.random();
+            b.position.y = height * Math.random();
             world.addBody(b);
         }
 

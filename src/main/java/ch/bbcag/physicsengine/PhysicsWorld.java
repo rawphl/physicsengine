@@ -21,6 +21,7 @@ public class PhysicsWorld extends RenderedPhysicsSimulation {
         super(width, height);
         this.width = width;
         this.height = height;
+        System.out.println("width = " + width + ", height = " + height);
     }
 
     @Override
